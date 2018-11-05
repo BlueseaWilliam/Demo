@@ -1,0 +1,24 @@
+//
+//  ParkInfo-Prefix.pch
+//  Demo
+//
+//  Created by William on 2018/11/5.
+//  Copyright © 2018年 William. All rights reserved.
+//
+
+#ifndef ParkInfo_Prefix_pch
+#define ParkInfo_Prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+
+#endif /* ParkInfo_Prefix_pch */
+
+
+#ifdef __OBJC__
+#import "ParkInfoDefine.h"
+#import "ParkInfo+CoreDataClass.h"
+#import <MBProgressHUD/MBProgressHUD.h>
+#import <MagicalRecord/MagicalRecord.h>
+#endif

@@ -7,9 +7,6 @@
 //
 
 #import "DataManager.h"
-#import "ParkInfo+CoreDataClass.h"
-#import <MagicalRecord/MagicalRecord.h>
-
 
 static DataManager *dataManager = nil;
 
@@ -43,15 +40,15 @@ static DataManager *dataManager = nil;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         BOOL result = NO;
         
-        if ([dict objectForKey:@"success"] && [[dict objectForKey:@"success"] boolValue]) {
-            if ([[dict objectForKey:@"result"] objectForKey:@"records"]) {
+        if ([dict objectForKey:PK_API_LABEL_SUCCESS] && [[dict objectForKey:PK_API_LABEL_SUCCESS] boolValue]) {
+            if ([dict objectForKey:PK_API_LABEL_RESULT] && [[dict objectForKey:PK_API_LABEL_RESULT] objectForKey:PK_API_LABEL_RECORDS]) {
                 NSDate *date = [NSDate date];
-                NSArray *array = [[dict objectForKey:@"result"] objectForKey:@"records"];
+                NSArray *array = [[dict objectForKey:PK_API_LABEL_RESULT] objectForKey:PK_API_LABEL_RECORDS];
                 NSManagedObjectContext *newContext = [NSManagedObjectContext MR_rootSavingContext];
                 
                 for (NSDictionary *d in array) {
-                    if ([d objectForKey:@"ID"] && [d objectForKey:@"NAME"]) {
-                        ParkInfo *parkinfo = [self findParkInByID:[d objectForKey:@"ID"] name:[d objectForKey:@"NAME"]];
+                    if ([d objectForKey:PK_API_LABEL_ID] && [d objectForKey:PK_API_LABEL_NAME]) {
+                        ParkInfo *parkinfo = [self findParkInByID:[d objectForKey:PK_API_LABEL_ID] name:[d objectForKey:PK_API_LABEL_NAME]];
                         
                         if (!parkinfo) {
                             [self createNewParkInfoByDictionary:d withData:date withContext:newContext];
@@ -143,37 +140,37 @@ static DataManager *dataManager = nil;
 }
 
 - (void)updateParkInfo:(ParkInfo **)parkInfo byDictionary:(NSDictionary *)dict withData:(NSDate *)date {
-    if([dict objectForKey:@"AREA"]) (*parkInfo).area = [dict objectForKey:@"AREA"];
-    if([dict objectForKey:@"TYPE"]) (*parkInfo).type = [dict objectForKey:@"TYPE"];
-    if([dict objectForKey:@"SUMMARY"]) (*parkInfo).summary = [dict objectForKey:@"SUMMARY"];
-    if([dict objectForKey:@"ADDRESS"]) (*parkInfo).address = [dict objectForKey:@"ADDRESS"];
-    if([dict objectForKey:@"TEL"]) (*parkInfo).tel = [dict objectForKey:@"TEL"];
-    if([dict objectForKey:@"PAYEX"]) (*parkInfo).payex = [dict objectForKey:@"PAYEX"];
-    if([dict objectForKey:@"SERVICETIME"]) (*parkInfo).servicetime = [dict objectForKey:@"SERVICETIME"];
-    if([dict objectForKey:@"TW97X"]) (*parkInfo).tw97x = [dict objectForKey:@"TW97X"];
-    if([dict objectForKey:@"TW97Y"]) (*parkInfo).tw97y = [dict objectForKey:@"TW97Y"];
-    if([dict objectForKey:@"TOTALCAR"]) (*parkInfo).totalcar = [dict objectForKey:@"TOTALCAR"];
-    if([dict objectForKey:@"TOTALMOTOR"]) (*parkInfo).totalmotor = [dict objectForKey:@"TOTALMOTOR"];
-    if([dict objectForKey:@"TOTALBIKE"]) (*parkInfo).totalbike = [dict objectForKey:@"TOTALBIKE"];
+    if([dict objectForKey:PK_API_LABEL_AREA]) (*parkInfo).area = [dict objectForKey:PK_API_LABEL_AREA];
+    if([dict objectForKey:PK_API_LABEL_TYPE]) (*parkInfo).type = [dict objectForKey:PK_API_LABEL_TYPE];
+    if([dict objectForKey:PK_API_LABEL_SUMMARY]) (*parkInfo).summary = [dict objectForKey:PK_API_LABEL_SUMMARY];
+    if([dict objectForKey:PK_API_LABEL_ADDRESS]) (*parkInfo).address = [dict objectForKey:PK_API_LABEL_ADDRESS];
+    if([dict objectForKey:PK_API_LABEL_TEL]) (*parkInfo).tel = [dict objectForKey:PK_API_LABEL_TEL];
+    if([dict objectForKey:PK_API_LABEL_PAYEX]) (*parkInfo).payex = [dict objectForKey:PK_API_LABEL_PAYEX];
+    if([dict objectForKey:PK_API_LABEL_SERVICETIME]) (*parkInfo).servicetime = [dict objectForKey:PK_API_LABEL_SERVICETIME];
+    if([dict objectForKey:PK_API_LABEL_TW97X]) (*parkInfo).tw97x = [dict objectForKey:PK_API_LABEL_TW97X];
+    if([dict objectForKey:PK_API_LABEL_TW97Y]) (*parkInfo).tw97y = [dict objectForKey:PK_API_LABEL_TW97Y];
+    if([dict objectForKey:PK_API_LABEL_TOTALCAR]) (*parkInfo).totalcar = [dict objectForKey:PK_API_LABEL_TOTALCAR];
+    if([dict objectForKey:PK_API_LABEL_TOTALMOTOR]) (*parkInfo).totalmotor = [dict objectForKey:PK_API_LABEL_TOTALMOTOR];
+    if([dict objectForKey:PK_API_LABEL_TOTALBIKE]) (*parkInfo).totalbike = [dict objectForKey:PK_API_LABEL_TOTALBIKE];
     (*parkInfo).accessdate = date;
 }
 
 - (void)createNewParkInfoByDictionary:(NSDictionary *)dict withData:(NSDate *)date withContext:(NSManagedObjectContext *)context {
     ParkInfo *parkInfo = [ParkInfo MR_createEntityInContext:context];
-    if([dict objectForKey:@"ID"]) parkInfo.idkey = [dict objectForKey:@"ID"];
-    if([dict objectForKey:@"NAME"]) parkInfo.name = [dict objectForKey:@"NAME"];
-    if([dict objectForKey:@"AREA"]) parkInfo.area = [dict objectForKey:@"AREA"];
-    if([dict objectForKey:@"TYPE"]) parkInfo.type = [dict objectForKey:@"TYPE"];
-    if([dict objectForKey:@"SUMMARY"]) parkInfo.summary = [dict objectForKey:@"SUMMARY"];
-    if([dict objectForKey:@"ADDRESS"]) parkInfo.address = [dict objectForKey:@"ADDRESS"];
-    if([dict objectForKey:@"TEL"]) parkInfo.tel = [dict objectForKey:@"TEL"];
-    if([dict objectForKey:@"PAYEX"]) parkInfo.payex = [dict objectForKey:@"PAYEX"];
-    if([dict objectForKey:@"SERVICETIME"]) parkInfo.servicetime = [dict objectForKey:@"SERVICETIME"];
-    if([dict objectForKey:@"TW97X"]) parkInfo.tw97x = [dict objectForKey:@"TW97X"];
-    if([dict objectForKey:@"TW97Y"]) parkInfo.tw97y = [dict objectForKey:@"TW97Y"];
-    if([dict objectForKey:@"TOTALCAR"]) parkInfo.totalcar = [dict objectForKey:@"TOTALCAR"];
-    if([dict objectForKey:@"TOTALMOTOR"]) parkInfo.totalmotor = [dict objectForKey:@"TOTALMOTOR"];
-    if([dict objectForKey:@"TOTALBIKE"]) parkInfo.totalbike = [dict objectForKey:@"TOTALBIKE"];
+    if([dict objectForKey:PK_API_LABEL_ID]) parkInfo.idkey = [dict objectForKey:PK_API_LABEL_ID];
+    if([dict objectForKey:PK_API_LABEL_NAME]) parkInfo.name = [dict objectForKey:PK_API_LABEL_NAME];
+    if([dict objectForKey:PK_API_LABEL_AREA]) parkInfo.area = [dict objectForKey:PK_API_LABEL_AREA];
+    if([dict objectForKey:PK_API_LABEL_TYPE]) parkInfo.type = [dict objectForKey:PK_API_LABEL_TYPE];
+    if([dict objectForKey:PK_API_LABEL_SUMMARY]) parkInfo.summary = [dict objectForKey:PK_API_LABEL_SUMMARY];
+    if([dict objectForKey:PK_API_LABEL_ADDRESS]) parkInfo.address = [dict objectForKey:PK_API_LABEL_ADDRESS];
+    if([dict objectForKey:PK_API_LABEL_TEL]) parkInfo.tel = [dict objectForKey:PK_API_LABEL_TEL];
+    if([dict objectForKey:PK_API_LABEL_PAYEX]) parkInfo.payex = [dict objectForKey:PK_API_LABEL_PAYEX];
+    if([dict objectForKey:PK_API_LABEL_SERVICETIME]) parkInfo.servicetime = [dict objectForKey:PK_API_LABEL_SERVICETIME];
+    if([dict objectForKey:PK_API_LABEL_TW97X]) parkInfo.tw97x = [dict objectForKey:PK_API_LABEL_TW97X];
+    if([dict objectForKey:PK_API_LABEL_TW97Y]) parkInfo.tw97y = [dict objectForKey:PK_API_LABEL_TW97Y];
+    if([dict objectForKey:PK_API_LABEL_TOTALCAR]) parkInfo.totalcar = [dict objectForKey:PK_API_LABEL_TOTALCAR];
+    if([dict objectForKey:PK_API_LABEL_TOTALMOTOR]) parkInfo.totalmotor = [dict objectForKey:PK_API_LABEL_TOTALMOTOR];
+    if([dict objectForKey:PK_API_LABEL_TOTALBIKE]) parkInfo.totalbike = [dict objectForKey:PK_API_LABEL_TOTALBIKE];
     parkInfo.accessdate = date;
     parkInfo = nil;
 }

@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MapKit/MapKit.h>
 
 @class ParkInfo;
+@class MKMapView;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 
 #import "ParkInfoViewController.h"
-#import <MagicalRecord/MagicalRecord.h>
 
 
 @interface AppDelegate ()
@@ -22,6 +21,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+    //setup CoreData
     [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"demo.sqlite"];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

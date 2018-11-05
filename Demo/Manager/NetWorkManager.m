@@ -7,8 +7,7 @@
 //
 
 #import "NetWorkManager.h"
-
-#define API_URL @"http://data.ntpc.gov.tw/api/v1/rest/datastore/382000000A-000225-002"
+#import "Reachability.h"
 
 static NetWorkManager *netWorkManager = nil;
 
@@ -34,26 +33,35 @@ static NetWorkManager *netWorkManager = nil;
 }
 
 - (void)getDataFromAPICompletion:(void (^)(bool result, NSDictionary *dict))completion {
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:API_URL]];
-    NSURLSessionDataTask *sessionDataTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    Reachability *reach = [Reachability reachabilityForInternetConnection];
+    if (reach.currentReachabilityStatus == NotReachable) {
+        NSLog(@"Device is not connected to the internet");
         
-        if(!data) {
-            if (completion) {
-                completion(NO, nil);
-            }
-        }else {
-            NSError *jsonError;
-            NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completion) {
-                    (error) ? completion(NO, nil) : completion(YES, jsonData);
-                }
-            });
+        if (completion) {
+            completion(NO, nil);
         }
-    }];
-    
-    [sessionDataTask resume];
+    }else {
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:PK_API_URL]];
+        NSURLSessionDataTask *sessionDataTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            
+            if(!data) {
+                if (completion) {
+                    completion(NO, nil);
+                }
+            }else {
+                NSError *jsonError;
+                NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completion) {
+                        (error) ? completion(NO, nil) : completion(YES, jsonData);
+                    }
+                });
+            }
+        }];
+        
+        [sessionDataTask resume];
+    }
 }
 
 @end

@@ -8,11 +8,10 @@
 
 #import "ParkInfoViewDetailController.h"
 
-#import "ParkInfo+CoreDataClass.h"
 #import "ParkInfoViewDetailTableViewCell.h"
 
+#import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
-#import <MBProgressHUD/MBProgressHUD.h>
 
 
 @interface ParkInfoViewDetailController () <UITableViewDelegate, UITableViewDataSource, MKMapViewDelegate, CLLocationManagerDelegate>

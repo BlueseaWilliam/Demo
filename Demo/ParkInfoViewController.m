@@ -9,11 +9,10 @@
 #import "ParkInfoViewController.h"
 #import "ParkInfoViewDetailController.h"
 
+#import "ParkInfoTableViewCell.h"
+
 #import "DataManager.h"
 #import "NetWorkManager.h"
-#import "ParkInfoTableViewCell.h"
-#import "ParkInfo+CoreDataClass.h"
-#import <MBProgressHUD/MBProgressHUD.h>
 
 
 @interface ParkInfoViewController () <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITableViewDelegate, UITableViewDataSource>
@@ -54,12 +53,12 @@
     [[NetWorkManager sharedManager] getDataFromAPICompletion:^(bool result, NSDictionary * _Nonnull dict) {
         if (!result) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            NSLog(@"get data fail");
+            NSLog(@"Failed to fetch data from API server");
         }else {
             [[DataManager sharedManager] setupDBByJsonDictionary:dict completion:^(bool result) {
                 if (!result) {
                     [MBProgressHUD hideHUDForView:self.view animated:YES];
-                    NSLog(@"setup data fail");
+                    NSLog(@"Failed to setup DB");
                 }else {
                     [[DataManager sharedManager] getParkInfoAllDataCompletion:^(NSArray * _Nonnull array) {
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -75,7 +74,6 @@
 
 #pragma mark - Button Methods
 - (void)pressDone:(UIBarButtonItem *)sender {
-    //dismiss PickerView responder
     [self.areaField resignFirstResponder];
     
     if (self.areaSelected == 0) {
@@ -86,7 +84,6 @@
 }
 
 - (void)pressCancel:(UIBarButtonItem *)sender {
-    //dismiss PickerView responder
     [self.areaField resignFirstResponder];
 }
 
@@ -132,13 +129,13 @@
 - (void)handleRefresh {
     [[NetWorkManager sharedManager] getDataFromAPICompletion:^(bool result, NSDictionary * _Nonnull dict) {
         if (!result) {
-            NSLog(@"get data fail");
+            NSLog(@"Failed to fetch data from API server");
         }else {
             [[DataManager sharedManager] setupDBByJsonDictionary:dict completion:^(bool result) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 
                 if (!result) {
-                    NSLog(@"setup data fail");
+                    NSLog(@"Failed to update DB");
                 }else {
                     [[DataManager sharedManager] getParkInfoDataByArea:self.areaField.text withKeyword:self.keywordField.text withCompletion:^(NSArray * _Nonnull array) {
                         self.dataArray = array;

@@ -12,8 +12,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ParkInfoViewDetailController">
             <connections>
-                <outlet property="infoView" destination="hUR-Jt-Qho" id="tdp-ZB-9Ll"/>
-                <outlet property="mapView" destination="G8F-rp-bSM" id="bRX-j0-EVC"/>
+                <outlet property="infoView" destination="hUR-Jt-Qho" id="e7o-As-6Dn"/>
+                <outlet property="mapView" destination="G8F-rp-bSM" id="OcW-WS-20K"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="xpO-Yu-edj"/>
             </connections>
         </placeholder>
@@ -26,14 +26,14 @@
                     <rect key="frame" x="0.0" y="20" width="375" height="215.5"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <connections>
-                        <outlet property="dataSource" destination="-1" id="yc2-Yu-6xe"/>
-                        <outlet property="delegate" destination="-1" id="TJc-O0-6Gw"/>
+                        <outlet property="dataSource" destination="-1" id="rtP-Fd-6Uo"/>
+                        <outlet property="delegate" destination="-1" id="9dk-fT-Svn"/>
                     </connections>
                 </tableView>
                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="G8F-rp-bSM">
                     <rect key="frame" x="0.0" y="235.5" width="375" height="431.5"/>
                     <connections>
-                        <outlet property="delegate" destination="-1" id="q5m-ki-Rgm"/>
+                        <outlet property="delegate" destination="-1" id="Agf-Hr-jeB"/>
                     </connections>
                 </mapView>
             </subviews>
