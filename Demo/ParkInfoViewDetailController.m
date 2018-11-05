@@ -10,6 +10,8 @@
 
 #import "ParkInfoViewDetailTableViewCell.h"
 
+#import "NetWorkManager.h"
+
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 
@@ -81,19 +83,24 @@
 }
 
 - (void)routeBtnPress {
-    if (![CLLocationManager locationServicesEnabled] ) {
+    if (![[NetWorkManager sharedManager] isNetworkConnected]) {
+        NSLog(@"Device is not connected to the internet");
+    }else if (![CLLocationManager locationServicesEnabled] ) {
         NSLog(@"Please enable location service");
-        return;
     }else {
-        self.navigationItem.rightBarButtonItem = self.clearBtn;
-        
         if (!self.locationManager) {
             self.locationManager = [[CLLocationManager alloc] init];
             self.locationManager.delegate = self;
             self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
             self.locationManager.distanceFilter = 10.0f;
         }else {
-            [self route];
+            CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+            if (status == kCLAuthorizationStatusAuthorizedAlways || status == kCLAuthorizationStatusAuthorizedWhenInUse) {
+                [self route];
+                self.navigationItem.rightBarButtonItem = self.clearBtn;
+            }else {
+                NSLog(@"Please Enable GPS permission");
+            }
         }
     }
 }
@@ -253,11 +260,12 @@
 #pragma mark - CLLocationManager delegate
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     if (status == kCLAuthorizationStatusRestricted || status ==  kCLAuthorizationStatusDenied) {
-        NSLog(@"Please enable location service");
+        NSLog(@"Please Enable GPS permission");
     }else if (status == kCLAuthorizationStatusNotDetermined) {
         [self.locationManager requestWhenInUseAuthorization];
     }else {
         [self.locationManager startUpdatingLocation];
+        self.navigationItem.rightBarButtonItem = self.clearBtn;
     }
 }
 

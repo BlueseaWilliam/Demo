@@ -40,33 +40,53 @@ static DataManager *dataManager = nil;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         BOOL result = NO;
         
-        if ([dict objectForKey:PK_API_LABEL_SUCCESS] && [[dict objectForKey:PK_API_LABEL_SUCCESS] boolValue]) {
-            if ([dict objectForKey:PK_API_LABEL_RESULT] && [[dict objectForKey:PK_API_LABEL_RESULT] objectForKey:PK_API_LABEL_RECORDS]) {
-                NSDate *date = [NSDate date];
-                NSArray *array = [[dict objectForKey:PK_API_LABEL_RESULT] objectForKey:PK_API_LABEL_RECORDS];
-                NSManagedObjectContext *newContext = [NSManagedObjectContext MR_rootSavingContext];
-                
-                for (NSDictionary *d in array) {
-                    if ([d objectForKey:PK_API_LABEL_ID] && [d objectForKey:PK_API_LABEL_NAME]) {
-                        ParkInfo *parkinfo = [self findParkInByID:[d objectForKey:PK_API_LABEL_ID] name:[d objectForKey:PK_API_LABEL_NAME]];
-                        
-                        if (!parkinfo) {
-                            [self createNewParkInfoByDictionary:d withData:date withContext:newContext];
-                        }else {
-                            [self updateParkInfo:&parkinfo byDictionary:dict withData:date];
-                        }
-                    }
+        if (![dict objectForKey:PK_API_LABEL_SUCCESS] || ![[dict objectForKey:PK_API_LABEL_SUCCESS] boolValue]) {
+            NSLog(@"API is failure");
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completion) {
+                    completion(result);
                 }
+            });
+            
+            return;
+        }
+        
+        if (![dict objectForKey:PK_API_LABEL_RESULT] && ![[dict objectForKey:PK_API_LABEL_RESULT] objectForKey:PK_API_LABEL_RECORDS]) {
+            NSLog(@"API Data is Null");
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completion) {
+                    completion(result);
+                }
+            });
+            
+            return;
+        }
+        
+        NSDate *date = [NSDate date];
+        NSArray *array = [[dict objectForKey:PK_API_LABEL_RESULT] objectForKey:PK_API_LABEL_RECORDS];
+        NSManagedObjectContext *newContext = [NSManagedObjectContext MR_rootSavingContext];
+        
+        for (NSDictionary *d in array) {
+            if ([d objectForKey:PK_API_LABEL_ID] && [d objectForKey:PK_API_LABEL_NAME]) {
+                ParkInfo *parkinfo = [self findParkInByID:[d objectForKey:PK_API_LABEL_ID] name:[d objectForKey:PK_API_LABEL_NAME]];
                 
-                [self deleteDataByDateIfNeed:date withContext:newContext];
-                [newContext MR_saveToPersistentStoreAndWait];
-                
-                result = YES;
-                date = nil;
-                array = nil;
-                newContext = nil;
+                if (!parkinfo) {
+                    [self createNewParkInfoByDictionary:d withData:date withContext:newContext];
+                }else {
+                    [self updateParkInfo:&parkinfo byDictionary:dict withData:date];
+                }
             }
         }
+        
+        [self deleteDataByDateIfNeed:date withContext:newContext];
+        [newContext MR_saveToPersistentStoreAndWait];
+        
+        result = YES;
+        date = nil;
+        array = nil;
+        newContext = nil;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completion) {

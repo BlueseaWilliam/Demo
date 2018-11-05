@@ -52,13 +52,27 @@
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [[NetWorkManager sharedManager] getDataFromAPICompletion:^(bool result, NSDictionary * _Nonnull dict) {
         if (!result) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            NSLog(@"Failed to fetch data from API server");
+            NSLog(@"Failed to fetch data from API server, we need to load old data.");
+            
+            //load old data
+            [[DataManager sharedManager] getParkInfoAllDataCompletion:^(NSArray * _Nonnull array) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                
+                self.dataArray = array;
+                [self.listView reloadData];
+            }];
         }else {
             [[DataManager sharedManager] setupDBByJsonDictionary:dict completion:^(bool result) {
                 if (!result) {
-                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-                    NSLog(@"Failed to setup DB");
+                    NSLog(@"Failed to setup DB, we need to load old data.");
+                    
+                    //load old data
+                    [[DataManager sharedManager] getParkInfoAllDataCompletion:^(NSArray * _Nonnull array) {
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                        
+                        self.dataArray = array;
+                        [self.listView reloadData];
+                    }];
                 }else {
                     [[DataManager sharedManager] getParkInfoAllDataCompletion:^(NSArray * _Nonnull array) {
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -129,13 +143,29 @@
 - (void)handleRefresh {
     [[NetWorkManager sharedManager] getDataFromAPICompletion:^(bool result, NSDictionary * _Nonnull dict) {
         if (!result) {
-            NSLog(@"Failed to fetch data from API server");
+            NSLog(@"Failed to fetch data from API server, we need to load old data.");
+            
+            //load old data
+            [[DataManager sharedManager] getParkInfoAllDataCompletion:^(NSArray * _Nonnull array) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                
+                self.dataArray = array;
+                [self.listView reloadData];
+            }];
         }else {
             [[DataManager sharedManager] setupDBByJsonDictionary:dict completion:^(bool result) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 
                 if (!result) {
-                    NSLog(@"Failed to update DB");
+                    NSLog(@"Failed to update DB, we need to load old data.");
+                    
+                    //load old data
+                    [[DataManager sharedManager] getParkInfoAllDataCompletion:^(NSArray * _Nonnull array) {
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                        
+                        self.dataArray = array;
+                        [self.listView reloadData];
+                    }];
                 }else {
                     [[DataManager sharedManager] getParkInfoDataByArea:self.areaField.text withKeyword:self.keywordField.text withCompletion:^(NSArray * _Nonnull array) {
                         self.dataArray = array;

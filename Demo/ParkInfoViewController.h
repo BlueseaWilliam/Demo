@@ -10,9 +10,9 @@
 
 @interface ParkInfoViewController : UIViewController
 
-@property (nonatomic, weak) IBOutlet UITextField *areaField;
-@property (nonatomic, weak) IBOutlet UITextField *keywordField;
-@property (nonatomic, weak) IBOutlet UITableView *listView;
+@property (nonatomic, strong) IBOutlet UITextField *areaField;
+@property (nonatomic, strong) IBOutlet UITextField *keywordField;
+@property (nonatomic, strong) IBOutlet UITableView *listView;
 
 @end
 

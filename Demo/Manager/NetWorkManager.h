@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NetWorkManager : NSObject
 
 + (NetWorkManager *)sharedManager;
+
+- (BOOL)isNetworkConnected;
 - (void)getDataFromAPICompletion:(void (^)(bool result, NSDictionary *dict))completion;
 
 @end

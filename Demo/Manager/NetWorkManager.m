@@ -32,9 +32,19 @@ static NetWorkManager *netWorkManager = nil;
     return self;
 }
 
-- (void)getDataFromAPICompletion:(void (^)(bool result, NSDictionary *dict))completion {
+- (BOOL)isNetworkConnected {
+    BOOL result = NO;
     Reachability *reach = [Reachability reachabilityForInternetConnection];
-    if (reach.currentReachabilityStatus == NotReachable) {
+    
+    if (reach.currentReachabilityStatus != NotReachable) {
+        result = YES;
+    }
+    
+    return result;
+}
+
+- (void)getDataFromAPICompletion:(void (^)(bool result, NSDictionary *dict))completion {
+    if (![self isNetworkConnected]) {
         NSLog(@"Device is not connected to the internet");
         
         if (completion) {
