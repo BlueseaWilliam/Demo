@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14315.18" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="ParkInfo" representedClassName="ParkInfo" syncable="YES">
+        <attribute name="accessdate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="area" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="idkey" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="payex" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="servicetime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="summary" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tel" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="totalbike" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="totalcar" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="totalmotor" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tw97x" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tw97y" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <fetchIndex name="compoundIndex">
+            <fetchIndexElement property="idkey" type="Binary" order="ascending"/>
+            <fetchIndexElement property="name" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <elements>
+        <element name="ParkInfo" positionX="-11952.6796875" positionY="-2121.98828125" width="128" height="270"/>
+    </elements>
+</model>

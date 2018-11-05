@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<string>不選擇</string>
+	<string>板橋區</string>
+	<string>新莊區</string>
+	<string>泰山區</string>
+	<string>林口區</string>
+	<string>淡水區</string>
+	<string>金山區</string>
+	<string>八里區</string>
+	<string>萬里區</string>
+	<string>石門區</string>
+	<string>三芝區</string>
+	<string>瑞芳區</string>
+	<string>汐止區</string>
+	<string>平溪區</string>
+	<string>貢寮區</string>
+	<string>雙溪區</string>
+	<string>深坑區</string>
+	<string>石碇區</string>
+	<string>新店區</string>
+	<string>坪林區</string>
+	<string>烏來區</string>
+	<string>中和區</string>
+	<string>永和區</string>
+	<string>土城區</string>
+	<string>三峽區</string>
+	<string>樹林區</string>
+	<string>鶯歌區</string>
+	<string>三重區</string>
+	<string>蘆洲區</string>
+	<string>五股區</string>
+</array>
+</plist>
